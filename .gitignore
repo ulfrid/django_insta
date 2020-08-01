@@ -272,3 +272,5 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,django,vim,git,python
+sendgrid.env
+sendgrid.env
