@@ -1,11 +1,11 @@
 <div class="d-flex p-2">
     <div class="mr-2">
-    <img src="{{ user.avatar_url }}" style="width:45px;" class="rounded-circle" />
+        <img src="{{ user.avatar_url }}" style="width:45px;" class="rounded-circle" />
     </div>
     <div>
-    {{user.username}}
-    <br>
-    <small class="text-muted">{{user.name}}</small>
+        {{user.username}}
+        <br>
+        <small class="text-muted">{{user.name}}</small>
     </div>
 </div>
 
@@ -23,9 +23,9 @@
     </div>
     <div class="card-body text-muted">
         {% for suggested_user in suggested_user_list %}
-            {% include "instagram/timeline_sidebar_user_follow.html" %}
+        {% include "instagram/timeline_sidebar_user_follow.html" %}
         {% empty %}
-            추천 친구가 존재하지 않습니다.
+        추천 친구가 존재하지 않습니다.
         {% endfor %}
     </div>
 </div>

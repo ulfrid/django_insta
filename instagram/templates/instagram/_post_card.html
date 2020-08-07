@@ -8,34 +8,30 @@
         </a>
     </div>
     <div class="card-body">
-        <img src="{{ post.photo.url }}" style="width: 100%;"/>
+        <img src="{{ post.photo.url }}" style="width: 100%;" />
         <div>
-        {% if post|is_like_user:user %}
+            {% if post|is_like_user:user %}
             <a href="{% url "instagram:post_unlike" post.pk %}" style="color: inherit;">
                 <i class="fa fa-heart"></i>
             </a>
-        {% else %}
+            {% else %}
             <a href="{% url "instagram:post_like" post.pk %}" style="color: inherit;">
                 <i class="fa fa-heart-o"></i>
             </a>
-        {% endif %}
+            {% endif %}
         </div>
-        <div class="comment-list">
+        <div id="post-{{ post.pk }}-comment-list" class="comment-list mt-3 mb-3">
             {% for comment in post.comment_set.all %}
-                <div class="comment">
-                    <strong> {{ comment.author }}</strong>
-                    {{ comment.message }}
-                    <small>{{ comment.created_at|naturaltime }}</small>
-                </div>
+            {% include "instagram/_comment.html" %}
             {% endfor %}
-            
+
         </div>
         <div>
-        {% for tag in post.tag_set.all %}
+            {% for tag in post.tag_set.all %}
             <span class="badge badge-primary">
                 #{{tag.name}}
             </span>
-        {% endfor %}
+            {% endfor %}
         </div>
         <div>
             <a href="{{ post.get_absolute_url }}" style="" class="text-muted">
@@ -46,10 +42,36 @@
         </div>
     </div>
     <div class="card-footer">
-        <form action="{% url "instagram:comment_new" post.pk %}" method="POST">
+        <form id="post-{{ post.pk }}-comment-form" action="{% url "instagram:comment_new" post.pk %}" method="POST">
             {% csrf_token %}
             {% bootstrap_form comment_form %}
             <input type="submit" value="댓글쓰기" class="btn btn-primary btn-block" />
         </form>
+
+
+        <script>
+            jQuery(function () {
+                var form_id = "post-{{ post.pk }}-comment-form";
+                $("#" + form_id).submit(function (e) {
+                    e.preventDefault();
+
+                    var options = {
+                        success: function (responseText, statusText, xhr, $form) {
+                            console.group("ajaxSubmit response");
+                            console.log(responseText);
+                            console.log(statusText);
+                            console.log(xhr);
+                            console.log($form);
+                            console.groupEnd();
+
+                            $("#post-{{post.pk}}-comment-list").append(responseText);
+                        }
+                    }
+
+                    $(this).ajaxSubmit(options);
+                });
+                console.log("document ready.");
+            });
+        </script>
     </div>
 </div>
